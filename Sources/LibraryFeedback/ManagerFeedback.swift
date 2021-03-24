@@ -61,7 +61,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func selectionSimple() {
+    public class func selectionSimple() {
         if isSoundEnabled {
             //AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -71,7 +71,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func checkBox() {
+    public class func checkBox() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -80,7 +80,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func componentSelector() {
+    public class func componentSelector() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -91,7 +91,7 @@ public class ManagerFeedback {
     
     // MARK: - Feedbacks - Components - Table View
     
-    class func componentTableViewDragDropBegin() {
+    public class func componentTableViewDragDropBegin() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -100,7 +100,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func componentTableViewDragDropChanging() {
+    public class func componentTableViewDragDropChanging() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Selector)
         }
@@ -109,7 +109,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func componentTableViewDragDropEnd() {
+    public class func componentTableViewDragDropEnd() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -120,7 +120,7 @@ public class ManagerFeedback {
     
     // MARK: - Feedbacks - Onboarding
     
-    class func buttonNext() {
+    public class func buttonNext() {
         if isSoundEnabled {
             //AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -129,7 +129,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func buttonBack() {
+    public class func buttonBack() {
         if isSoundEnabled {
             //AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -138,7 +138,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func buttonSkip() {
+    public class func buttonSkip() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Skip)
         }
@@ -149,7 +149,7 @@ public class ManagerFeedback {
     
     // MARK: - Feedbacks - TabBar
     
-    class func tabs() {
+    public class func tabs() {
         if isSoundEnabled {
             //AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -160,7 +160,7 @@ public class ManagerFeedback {
     
     // MARK: - Feedbacks - Buttons
     
-    class func buttonAdd() {
+    public class func buttonAdd() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -169,7 +169,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func buttonClose() {
+    public class func buttonClose() {
         if isSoundEnabled {
             //AudioServicesPlaySystemSound(soundID_Skip)
         }
@@ -178,7 +178,7 @@ public class ManagerFeedback {
         }
     }
         
-    class func buttonEdit() {
+    public class func buttonEdit() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -187,7 +187,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func buttonDelete() {
+    public class func buttonDelete() {
         if isSoundEnabled {
             //AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -196,7 +196,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func deleted() {
+    public class func deleted() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Delete)
         }
@@ -207,7 +207,7 @@ public class ManagerFeedback {
     
     // MARK: - Settings - Links
     
-    class func info() {
+    public class func info() {
         if isSoundEnabled {
             //AudioServicesPlaySystemSound(soundID_Impact)
         }
@@ -216,7 +216,7 @@ public class ManagerFeedback {
         }
     }
     
-    class func segment() {
+    public class func segment() {
         if isSoundEnabled {
             AudioServicesPlaySystemSound(soundID_Impact)
         }

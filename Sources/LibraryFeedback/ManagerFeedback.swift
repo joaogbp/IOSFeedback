@@ -12,6 +12,24 @@ public class ManagerFeedback {
     
     // MARK: - Properties
     
+    static public var isHapticEnabled: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "settings_feedback_haptic")
+        }
+        set(status) {
+            UserDefaults.standard.set(status, forKey: "settings_feedback_haptic")
+        }
+    }
+    
+    static public var isSoundEnabled: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "settings_feedback_sound")
+        }
+        set(status) {
+            UserDefaults.standard.set(status, forKey: "settings_feedback_sound")
+        }
+    }
+    
     // MARK: - Life Cycle
     
     private init() { }
@@ -31,12 +49,180 @@ public class ManagerFeedback {
     static private var soundIDHMM_2: SystemSoundID = 1052 // HAPTIC
     
     static private var soundID_Type: SystemSoundID = 1306 // Type Light
-
-    // MARK: - Feedbacks - Components
     
-    public class func selectionFeedback() {
-        AudioServicesPlaySystemSound(soundID_Type)
-        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+    // MARK: - Feedbacks
+    
+    public class func selection() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Type)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
+    }
+    
+    class func selectionSimple() {
+        if isSoundEnabled {
+            //AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            guard isHapticEnabled else { return }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func checkBox() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+        }
+    }
+    
+    class func componentSelector() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
+    }
+    
+    // MARK: - Feedbacks - Components - Table View
+    
+    class func componentTableViewDragDropBegin() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
+    }
+    
+    class func componentTableViewDragDropChanging() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Selector)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func componentTableViewDragDropEnd() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
+    }
+    
+    // MARK: - Feedbacks - Onboarding
+    
+    class func buttonNext() {
+        if isSoundEnabled {
+            //AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func buttonBack() {
+        if isSoundEnabled {
+            //AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func buttonSkip() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Skip)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
+    }
+    
+    // MARK: - Feedbacks - TabBar
+    
+    class func tabs() {
+        if isSoundEnabled {
+            //AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    // MARK: - Feedbacks - Buttons
+    
+    class func buttonAdd() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func buttonClose() {
+        if isSoundEnabled {
+            //AudioServicesPlaySystemSound(soundID_Skip)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+        
+    class func buttonEdit() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func buttonDelete() {
+        if isSoundEnabled {
+            //AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func deleted() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Delete)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    // MARK: - Settings - Links
+    
+    class func info() {
+        if isSoundEnabled {
+            //AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
+    class func segment() {
+        if isSoundEnabled {
+            AudioServicesPlaySystemSound(soundID_Impact)
+        }
+        if isHapticEnabled {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
     }
     
 }

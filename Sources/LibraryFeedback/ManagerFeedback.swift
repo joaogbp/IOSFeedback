@@ -120,21 +120,12 @@ public class ManagerFeedback {
     
     // MARK: - Feedbacks - Onboarding
     
-    public class func buttonNext() {
+    public class func buttonSlideNav() {
         if isSoundEnabled {
-            //AudioServicesPlaySystemSound(soundID_Impact)
+            AudioServicesPlaySystemSound(soundID_Selector)
         }
         if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    public class func buttonBack() {
-        if isSoundEnabled {
-            //AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }
     }
     

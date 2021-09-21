@@ -6,91 +6,103 @@ on:
   pull_request:
     branches: [ main ]
 
-# CI
-# https://augmentedcode.io/2021/04/26/running-tests-in-swift-package-with-github-actions/
-
 jobs:
+
   lint:
     runs-on: macos-latest
+    outputs:
+      outputLintSuccess: ${{ steps.stepLintSuccess.outputs.result }}
+      outputLintFailure: ${{ steps.stepLintFailure.outputs.result }}
     steps:
     - name: Repository checkout
       uses: actions/checkout@v2
     - name: Lint
       run: swiftlint
-#  macos:
-#    runs-on: macos-latest
-#    steps:
-#    - name: Repository checkout
-#      uses: actions/checkout@v2
-#    - name: Build for macOS
-#      run: swift build -v
-#    - name: Run macOS tests
-#      run: swift test -v
+    - name: 🤔 Lint - Check Results - Success ✅
+      if: ${{ success() }} # steps.build.outputs.exit_status == 0
+      id: stepLintSuccess
+      run: |
+        echo "::set-output name=result::✅ Lint"
+    - name: 🤔 Lint - Check Results - Failure ❌
+      if: ${{ failure() }} # steps.build.outputs.exit_status != 0
+      id: stepLintFailure
+      run: |
+        echo "::set-output name=result::❌ Lint"
+
   ios:
     runs-on: macos-latest
+    outputs:
+      outputBuildSuccess: ${{ steps.stepBuildSuccess.outputs.result }}
+      outputBuildFailure: ${{ steps.stepBuildFailure.outputs.result }}
+      outputTestsSuccess: ${{ steps.stepTestsSuccess.outputs.result }}
+      outputTestsFailure: ${{ steps.stepTestsFailure.outputs.result }}
+      outputFinalSuccess: ${{ steps.stepFinalSuccess.outputs.result }}
+      outputFinalFailure: ${{ steps.stepFinalFailure.outputs.result }}
+    env:
+      GITHUB_ACCESS_TOKEN: ${{ secrets.TOKEN_CI }}
+      GYM_USE_SYSTEM_SCM: true
+      SCAN_USE_SYSTEM_SCM: true
     steps:
     - name: Repository checkout
       uses: actions/checkout@v2
-#      with:
-#          token: '${{ secrets.TOKEN_CI }}'
-#          repository: joaogbp/LibraryTheme
-    - name: Build for iOS
+    - name: List
+      run: ls
+      
+    - name: Add Private Repo Auth
+      run: git config --global --add url."https://${GITHUB_ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY_OWNER}".insteadOf "https://github.com/${GITHUB_REPOSITORY_OWNER}"
+    - name: 📱 Build List
+      run: xcodebuild -list
+    
+    - name: 📱 Build for iOS
+      id: build
       run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild build-for-testing -scheme LibraryFeedback -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
-    - name: Run iOS tests
-      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test-without-building -scheme LibraryFeedback -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
-
-######### OLDER #########
-
-# Para xcodebuild se for necessario auth com HTTP e SSH
-# -usePackageSupportBuiltinSCM
-
-########################################################################
-#jobs:
-#  build:
-#
-#    runs-on: macos-latest
-#
-#    steps:
-#    - uses: actions/checkout@v2
-##    - name: Open simulator
-##      run: open -a simulator
-#
-#    - name: Generate xcodeproj
-#      run: swift package generate-xcodeproj
-#
-#    - name: Xcode Clean
-#      run: xcodebuild clean
-#
-#    - name: Build
-#      run: xcodebuild build -sdk iphoneos -scheme 'LibraryTheme-Package'
-##      run: swift build -v
-#
-#    - name: Resolve dependencies
-#      run: xcodebuild -resolvePackageDependencies
-#
-#    - name: Run tests
-#      run: xcodebuild test -destination 'name=iPhone 11' -scheme 'LibraryTheme-Package'
-##      run: swift test -v
-#
-## https://bugs.swift.org/browse/SR-13773
-## swift package generate-xcodeproj
-## xcodebuild build -sdk iphoneos -scheme 'MyPackage-Package'
-## xcodebuild test -destination 'name=iPhone 11' -scheme 'MyPackage-Package'
-#
-## Use Simulator
-## https://stackoverflow.com/questions/34778823/swift-package-manager-uikit-dependency
-##      run: swift build -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios13.0-simulator"
-##      run: swift test -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios13.0-simulator"
-#
-#
-#
-##    - name: Xcode Build
-##      run: xcodebuild -destination 'name=iPhone 12' -scheme 'LibraryTheme-Package'
-##    - name: Xcode Test
-##      run: xcodebuild test LibraryTheme.xcodeproj -scheme LibraryTheme-Package
-##      run: swift package init --type library
-#
-##    - name: Run tests
-##      run: xcodebuild -scheme LibraryTheme-Package test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12'
-#
-#
+    - name: 🤔 Build for iOS - Check Results - Success ✅
+      if: ${{ success() }} # steps.build.outputs.exit_status == 0
+      id: stepBuildSuccess
+      run: |
+        echo "::set-output name=result::✅ Build"
+    - name: 🤔 Build for iOS - Check Results - Failure ❌
+      if: ${{ failure() }} # steps.build.outputs.exit_status != 0
+      id: stepBuildFailure
+      run: |
+        echo "::set-output name=result::❌ Build"
+    
+    - name: 📱 Tests for iOS
+      id: tests
+      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test-without-building -scheme LibraryFeedbackTests -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
+    - name: 🧐 Tests for iOS - Check Results - Success ✅
+      if: ${{ success() }} # steps.tests.outputs.exit_status == 0
+      id: stepTestsSuccess
+      run: |
+        echo "::set-output name=result::✅ Tests"
+    - name: 🧐 Tests for iOS - Check Results - Failure ❌
+      if: ${{ failure() }} # steps.tests.outputs.exit_status != 0
+      id: stepTestsFailure
+      run: |
+        echo "::set-output name=result::❌ Tests"
+    
+    - name: 👋🏻 Done - Check Results - Success ✅
+      if: ${{ success() }}
+      id: stepFinalSuccess
+      run: |
+        echo "::set-output name=result::✅"
+    - name: 👋🏻 Done - Check Results - Failure ❌
+      if: ${{ failure() }}
+      id: stepFinalFailure
+      run: |
+        echo "::set-output name=result::❌"
+      
+  message:
+    if: ${{ always() }}
+    needs: [lint, ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: whatsapp-notify
+        id: whatsapp-notify
+        env:
+          account_sid: ${{ secrets.twilio_account_sid }}
+          auth_token: ${{ secrets.twilio_auth_token }}
+          to_whatsapp_no: ${{ secrets.twilio_to_whatsapp_no }}
+          message: "CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}\nSteps:\n - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}\n - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}\n - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}"
+        uses: khaled-ibtikar/whatsapp-push-notify-action@master

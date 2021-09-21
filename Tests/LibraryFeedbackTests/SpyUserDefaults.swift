@@ -20,10 +20,10 @@ final class SpyUserDefaults: UserDefaults {
     }
     
     override func set(_ value: Bool, forKey defaultName: String) {
-        if key == "settings_feedback_haptic" {
+        if defaultName == "settings_feedback_haptic" {
             didCallBoolHapticSet = true
         }
-        if key == "settings_feedback_sound" {
+        if defaultName == "settings_feedback_sound" {
             didCallBoolSoundSet = true
         }
         return

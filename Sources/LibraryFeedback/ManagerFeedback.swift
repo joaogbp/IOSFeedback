@@ -12,6 +12,8 @@ public class ManagerFeedback {
     
     // MARK: - Properties
     
+    static var userDefaults: UserDefaults = UserDefaults.standard
+    
     static public var isHapticEnabled: Bool {
         get {
             UserDefaults.standard.bool(forKey: "settings_feedback_haptic")

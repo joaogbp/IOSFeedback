@@ -10,10 +10,6 @@ final class ManagerFeedbackTests: XCTestCase {
         sut.userDefaults = spy
     }
     
-    func testSpy() {
-        XCTAssertTrue(sut.userDefaults === spy)
-    }
-    
     func testSoundSet() {
         sut.isSoundEnabled = true
         XCTAssertTrue(spy.didCallBoolSoundSet)

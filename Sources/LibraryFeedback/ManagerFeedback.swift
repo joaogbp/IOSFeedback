@@ -16,19 +16,19 @@ public class ManagerFeedback {
     
     static public var isHapticEnabled: Bool {
         get {
-            UserDefaults.standard.bool(forKey: "settings_feedback_haptic")
+            userDefaults.bool(forKey: "settings_feedback_haptic")
         }
         set(status) {
-            UserDefaults.standard.set(status, forKey: "settings_feedback_haptic")
+            userDefaults.set(status, forKey: "settings_feedback_haptic")
         }
     }
     
     static public var isSoundEnabled: Bool {
         get {
-            UserDefaults.standard.bool(forKey: "settings_feedback_sound")
+            userDefaults.bool(forKey: "settings_feedback_sound")
         }
         set(status) {
-            UserDefaults.standard.set(status, forKey: "settings_feedback_sound")
+            userDefaults.set(status, forKey: "settings_feedback_sound")
         }
     }
     

@@ -22,7 +22,7 @@ final class ManagerFeedbackTests: XCTestCase {
     
     func testHapticSet() {
         sut.isHapticEnabled = true
-        XCTAssertTrue(spy.didCallBoolSoundSet)
+        XCTAssertTrue(spy.didCallBoolHapticSet)
     }
     
     func testHapticGet() {

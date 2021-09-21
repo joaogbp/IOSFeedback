@@ -12,11 +12,9 @@ final class SpyUserDefaults: UserDefaults {
     override func bool(forKey defaultName: String) -> Bool {
         if defaultName == "settings_feedback_haptic" {
             didCallBoolHaptic = true
-            return true
         }
         if defaultName == "settings_feedback_sound" {
             didCallBoolSound = true
-            return true
         }
         return false
     }
@@ -24,11 +22,9 @@ final class SpyUserDefaults: UserDefaults {
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "settings_feedback_haptic" {
             didCallBoolHapticSet = true
-            return
         }
         if key == "settings_feedback_sound" {
             didCallBoolSoundSet = true
-            return
         }
         return
     }

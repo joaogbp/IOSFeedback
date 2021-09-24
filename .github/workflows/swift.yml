@@ -135,7 +135,7 @@ jobs:
     - name: Notification Slack
       uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_CHANNEL: ci
+        SLACK_CHANNEL: front-mobile-ios-ci
         #SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
         #SLACK_ICON: 🤖 #https://github.com/rtCamp.png?size=48
         SLACK_TITLE: Results CI

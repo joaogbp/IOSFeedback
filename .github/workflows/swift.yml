@@ -92,17 +92,57 @@ jobs:
       run: |
         echo "::set-output name=result::❌"
       
-  message:
+  messageWhatsApp:
     if: ${{ always() }}
     needs: [lint, ios]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: whatsapp-notify
+      - name: Notification WhatsApp
         id: whatsapp-notify
         env:
           account_sid: ${{ secrets.twilio_account_sid }}
           auth_token: ${{ secrets.twilio_auth_token }}
           to_whatsapp_no: ${{ secrets.twilio_to_whatsapp_no }}
-          message: "CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}\nSteps:\n - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}\n - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}\n - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}"
+          message: |
+              CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
+              - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
+              - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
+              - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}
         uses: khaled-ibtikar/whatsapp-push-notify-action@master
+
+  messageTelegram:
+    if: ${{ always() }}
+    needs: [lint, ios]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notification Telegram
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
+          - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
+          - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
+          - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}
+
+  messageSlack:
+    if: ${{ always() }}
+    needs: [lint, ios]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notification Slack
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: ci
+        #SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        #SLACK_ICON: 🤖 #https://github.com/rtCamp.png?size=48
+        SLACK_TITLE: Results CI
+        SLACK_USERNAME: BotCI
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_MESSAGE: |
+          CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
+          - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
+          - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
+          - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}

@@ -2,11 +2,28 @@ name: Swift
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, app/productivity ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, app/productivity ]
 
 jobs:
+
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      repoName: ${{ steps.repoName.outputs.result }}
+      branchName: ${{ steps.branchName.outputs.result }}
+    steps:
+      - uses: actions/checkout@master
+      - name: Prepare Repo
+        id: repoName
+        run: |
+          echo "::set-output name=result::${GITHUB_REPOSITORY#*/}"
+      - uses: actions/checkout@master
+      - name: Prepare Branch
+        id: branchName
+        run: |
+          echo "::set-output name=result::${GITHUB_REF#*/}"
 
   lint:
     runs-on: macos-latest
@@ -47,15 +64,15 @@ jobs:
       uses: actions/checkout@v2
     - name: List
       run: ls
-      
+
     - name: Add Private Repo Auth
       run: git config --global --add url."https://${GITHUB_ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY_OWNER}".insteadOf "https://github.com/${GITHUB_REPOSITORY_OWNER}"
     - name: 📱 Build List
       run: xcodebuild -list
-    
+
     - name: 📱 Build for iOS
       id: build
-      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild build-for-testing -scheme LibraryFeedback -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
+      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild build-for-testing -scheme ${GITHUB_REPOSITORY#*/} -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
     - name: 🤔 Build for iOS - Check Results - Success ✅
       if: ${{ success() }} # steps.build.outputs.exit_status == 0
       id: stepBuildSuccess
@@ -66,10 +83,10 @@ jobs:
       id: stepBuildFailure
       run: |
         echo "::set-output name=result::❌ Build"
-    
+
     - name: 📱 Tests for iOS
       id: tests
-      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test-without-building -scheme LibraryFeedbackTests -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
+      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test-without-building -scheme ${GITHUB_REPOSITORY#*/}Tests -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
     - name: 🧐 Tests for iOS - Check Results - Success ✅
       if: ${{ success() }} # steps.tests.outputs.exit_status == 0
       id: stepTestsSuccess
@@ -80,7 +97,7 @@ jobs:
       id: stepTestsFailure
       run: |
         echo "::set-output name=result::❌ Tests"
-    
+
     - name: 👋🏻 Done - Check Results - Success ✅
       if: ${{ success() }}
       id: stepFinalSuccess
@@ -91,10 +108,10 @@ jobs:
       id: stepFinalFailure
       run: |
         echo "::set-output name=result::❌"
-      
+
   messageWhatsApp:
     if: ${{ always() }}
-    needs: [lint, ios]
+    needs: [lint, ios, prepare]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -105,15 +122,15 @@ jobs:
           auth_token: ${{ secrets.twilio_auth_token }}
           to_whatsapp_no: ${{ secrets.twilio_to_whatsapp_no }}
           message: |
-              CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
-              - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
-              - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
-              - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}
+              CI 👉🏻 ${{needs.prepare.outputs.repoName}} [${{needs.prepare.outputs.branchName}}] ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
+              ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
+              ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
+              ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}
         uses: khaled-ibtikar/whatsapp-push-notify-action@master
 
   messageTelegram:
     if: ${{ always() }}
-    needs: [lint, ios]
+    needs: [lint, ios, prepare]
     runs-on: ubuntu-latest
     steps:
     - name: Notification Telegram
@@ -122,14 +139,14 @@ jobs:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
-          CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
-          - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
-          - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
-          - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}
+          CI 👉🏻 ${{needs.prepare.outputs.repoName}} [${{needs.prepare.outputs.branchName}}] ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
+          ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
+          ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
+          ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}
 
   messageSlack:
     if: ${{ always() }}
-    needs: [lint, ios]
+    needs: [lint, ios, prepare]
     runs-on: ubuntu-latest
     steps:
     - name: Notification Slack
@@ -142,7 +159,7 @@ jobs:
         SLACK_USERNAME: BotCI
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_MESSAGE: |
-          CI 👉🏻 [Main] LibraryFeedback ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
-          - ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
-          - ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
-          - ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}
+          CI 👉🏻 ${{needs.prepare.outputs.repoName}} [${{needs.prepare.outputs.branchName}}] ${{needs.ios.outputs.outputFinalSuccess}}${{needs.ios.outputs.outputFinalFailure}}
+          ${{needs.lint.outputs.outputLintSuccess}}${{needs.lint.outputs.outputLintFailure}}
+          ${{needs.ios.outputs.outputBuildSuccess}}${{needs.ios.outputs.outputBuildFailure}}
+          ${{needs.ios.outputs.outputTestsSuccess}}${{needs.ios.outputs.outputTestsFailure}}

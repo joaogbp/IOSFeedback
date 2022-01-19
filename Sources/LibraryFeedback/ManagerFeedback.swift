@@ -8,12 +8,38 @@
 import UIKit
 import AVFoundation
 
+public enum SoundType: Int {
+    // swiftlint:disable identifier_name
+    case soundID_Impact = 1103 // Pin
+    // swiftlint:disable identifier_name
+    case soundID_Impact_Loud = 1057
+    // swiftlint:disable identifier_name
+    case soundID_Selector = 1105
+    
+    // swiftlint:disable identifier_name
+    case soundID_Delete = 1003
+    // swiftlint:disable identifier_name
+    
+    // swiftlint:disable identifier_name
+    case soundID_A = 1109 // X
+    // swiftlint:disable identifier_name
+    case soundIDHMM_0 = 1050 //
+    // swiftlint:disable identifier_name
+    case soundIDHMM_1 = 1051 // HAPTIC
+    // swiftlint:disable identifier_name
+    case soundIDHMM_2 = 1052 // HAPTIC
+    
+    // swiftlint:disable identifier_name
+    case soundID_Type = 1306 // Type Light
+}
+
 public class ManagerFeedback {
     
     // MARK: - Properties
     
     static var userDefaults: UserDefaults = UserDefaults.standard
     
+    static public var isHapticEnabledString = "settings_feedback_haptic"
     static public var isHapticEnabled: Bool {
         get {
             userDefaults.bool(forKey: "settings_feedback_haptic")
@@ -23,6 +49,7 @@ public class ManagerFeedback {
         }
     }
     
+    static public var isSoundEnabledString = "settings_feedback_sound"
     static public var isSoundEnabled: Bool {
         get {
             userDefaults.bool(forKey: "settings_feedback_sound")
@@ -38,193 +65,15 @@ public class ManagerFeedback {
     
     // MARK: - Sound IDs
     
-    // swiftlint:disable identifier_name
-    static private var soundID_Impact: SystemSoundID = 1103 // Pin
-    // swiftlint:disable identifier_name
-    static private var soundID_Impact_Loud: SystemSoundID = 1057
-    // swiftlint:disable identifier_name
-    static private var soundID_Selector: SystemSoundID = 1105
-    
-    // swiftlint:disable identifier_name
-    static private var soundID_Delete: SystemSoundID = 1003
-    // swiftlint:disable identifier_name
-    static private var soundID_Skip: SystemSoundID = 1003
-    
-    // swiftlint:disable identifier_name
-    static private var soundID_A: SystemSoundID = 1109 // X
-    // swiftlint:disable identifier_name
-    static private var soundIDHMM_0: SystemSoundID = 1050 //
-    // swiftlint:disable identifier_name
-    static private var soundIDHMM_1: SystemSoundID = 1051 // HAPTIC
-    // swiftlint:disable identifier_name
-    static private var soundIDHMM_2: SystemSoundID = 1052 // HAPTIC
-    
-    // swiftlint:disable identifier_name
-    static private var soundID_Type: SystemSoundID = 1306 // Type Light
-    
     // MARK: - Feedbacks
     
-    public class func selection() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Type)
+    public class func feedback(sound: SoundType? = nil,
+                               haptic: UIImpactFeedbackGenerator.FeedbackStyle? = nil) {
+        if isSoundEnabled, let sound = sound {
+            AudioServicesPlaySystemSound(SystemSoundID(sound.rawValue))
         }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
-    }
-    
-    public class func selectionSimple() {
-        if isSoundEnabled {
-            //AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            guard isHapticEnabled else { return }
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    public class func checkBox() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
-        }
-    }
-    
-    public class func componentSelector() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
-    }
-    
-    // MARK: - Feedbacks - Components - Table View
-    
-    public class func componentTableViewDragDropBegin() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
-    }
-    
-    public class func componentTableViewDragDropChanging() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Selector)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    public class func componentTableViewDragDropEnd() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
-    }
-    
-    // MARK: - Feedbacks - Onboarding
-    
-    public class func buttonSlideNav() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Selector)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
-    }
-    
-    public class func buttonSkip() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Skip)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
-    }
-    
-    // MARK: - Feedbacks - TabBar
-    
-    public class func tabs() {
-        if isSoundEnabled {
-            //AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    // MARK: - Feedbacks - Buttons
-    
-    public class func buttonAdd() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    public class func buttonClose() {
-        if isSoundEnabled {
-            //AudioServicesPlaySystemSound(soundID_Skip)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-        
-    public class func buttonEdit() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    public class func buttonDelete() {
-        if isSoundEnabled {
-            //AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    public class func deleted() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Delete)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    // MARK: - Settings - Links
-    
-    public class func info() {
-        if isSoundEnabled {
-            //AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        }
-    }
-    
-    public class func segment() {
-        if isSoundEnabled {
-            AudioServicesPlaySystemSound(soundID_Impact)
-        }
-        if isHapticEnabled {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        if isHapticEnabled, let haptic = haptic {
+            UIImpactFeedbackGenerator(style: haptic).impactOccurred()
         }
     }
     

@@ -1,3 +1,3 @@
 # LibraryFeedback
 
-A description of this package.
+Feedback is a package that requests the user feedback on the AppStore.

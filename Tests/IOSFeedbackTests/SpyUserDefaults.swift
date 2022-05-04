@@ -1,5 +1,5 @@
 import XCTest
-@testable import LibraryFeedback
+@testable import IOSFeedback
 
 final class SpyUserDefaults: UserDefaults {
     

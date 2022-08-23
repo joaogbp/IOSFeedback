@@ -23,14 +23,14 @@ public enum SoundType: Int {
     // swiftlint:disable identifier_name
     case soundID_A = 1109 // X
     // swiftlint:disable identifier_name
-    case soundIDHMM_0 = 1050 //
+    case soundID_B = 1050 //
     // swiftlint:disable identifier_name
-    case soundIDHMM_1 = 1051 // HAPTIC
+    case soundID_C = 1051 // HAPTIC
     // swiftlint:disable identifier_name
-    case soundIDHMM_2 = 1052 // HAPTIC
+    case soundID_D = 1052 // HAPTIC
     
     // swiftlint:disable identifier_name
-    case soundID_Type = 1306 // Type Light
+    case soundID_E = 1306 // Type Light
 }
 
 //UINotificationFeedbackGenerator().notificationOccurred(.error)

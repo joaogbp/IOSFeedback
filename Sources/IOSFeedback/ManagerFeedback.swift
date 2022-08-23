@@ -14,23 +14,23 @@ public class ManagerFeedback {
     
     static var userDefaults: UserDefaults = UserDefaults.standard
     
-    static public var isHapticEnabledString = "settings_feedback_haptic"
+    static private(set) var isHapticEnabledString = FeedbackLocalKeys.haptic.rawValue
     static public var isHapticEnabled: Bool {
         get {
-            userDefaults.bool(forKey: "settings_feedback_haptic")
+            userDefaults.bool(forKey: FeedbackLocalKeys.haptic.rawValue)
         }
         set(status) {
-            userDefaults.set(status, forKey: "settings_feedback_haptic")
+            userDefaults.set(status, forKey: FeedbackLocalKeys.haptic.rawValue)
         }
     }
     
-    static public var isSoundEnabledString = "settings_feedback_sound"
+    static private(set) var isSoundEnabledString = FeedbackLocalKeys.sound.rawValue
     static public var isSoundEnabled: Bool {
         get {
-            userDefaults.bool(forKey: "settings_feedback_sound")
+            userDefaults.bool(forKey: FeedbackLocalKeys.sound.rawValue)
         }
         set(status) {
-            userDefaults.set(status, forKey: "settings_feedback_sound")
+            userDefaults.set(status, forKey: FeedbackLocalKeys.sound.rawValue)
         }
     }
     

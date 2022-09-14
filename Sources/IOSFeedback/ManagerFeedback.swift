@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-internal class ManagerFeedback {
+public class ManagerFeedback {
     
     // MARK: - Properties
     

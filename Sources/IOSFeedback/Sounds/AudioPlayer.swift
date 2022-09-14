@@ -9,7 +9,7 @@ import AVFoundation
 
 // MARK: - Audio Data
 
-internal enum Audio: String {
+public enum Audio: String {
     case myAudio = "myAudio"
     
     func getType() -> AudioType {

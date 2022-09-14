@@ -38,7 +38,7 @@ internal class AudioPlayer: NSObject {
     private var myAudio: AVAudioPlayer?
 
     public init(audio: Audio) {
-        let path = Bundle.main.path(forResource: audio.rawValue, ofType: audio.getType().rawValue)!
+        let path = Bundle.allBundles.first!.path(forResource: audio.rawValue, ofType: audio.getType().rawValue)!
         let url = URL(fileURLWithPath: path)
         do {
             let sound = try AVAudioPlayer(contentsOf: url)

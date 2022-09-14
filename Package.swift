@@ -24,7 +24,7 @@ let package = Package(
         .target(
             name: "IOSFeedback",
             dependencies: [],
-            resources: [.copy("Sources/IOSFeedback/Resources")]
+            resources: [.process("Sources/IOSFeedback/Resources")]
         ),
         .testTarget(
             name: "IOSFeedbackTests",

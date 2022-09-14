@@ -10,12 +10,12 @@ import AVFoundation
 // MARK: - Audio Data
 
 public enum Audio: String {
-    case myAudio = "myAudio"
+    case myAudio = "MyAudio"
     
     func getType() -> AudioType {
         switch self {
         case .myAudio:
-            return .mp3
+            return .m4a
         }
     }
 }

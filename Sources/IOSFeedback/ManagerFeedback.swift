@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-public class ManagerFeedback {
+internal class ManagerFeedback {
     
     // MARK: - Properties
     
@@ -46,6 +46,16 @@ public class ManagerFeedback {
                                haptic: UIImpactFeedbackGenerator.FeedbackStyle? = nil) {
         if isSoundEnabled, let sound = sound {
             AudioServicesPlaySystemSound(SystemSoundID(sound.rawValue))
+        }
+        if isHapticEnabled, let haptic = haptic {
+            UIImpactFeedbackGenerator(style: haptic).impactOccurred()
+        }
+    }
+    
+    public class func feedbakCustom(sound: Audio? = nil,
+                                    haptic: UIImpactFeedbackGenerator.FeedbackStyle? = nil) {
+        if isSoundEnabled, let sound = sound {
+            AudioManager.shared.play(audio: sound)
         }
         if isHapticEnabled, let haptic = haptic {
             UIImpactFeedbackGenerator(style: haptic).impactOccurred()

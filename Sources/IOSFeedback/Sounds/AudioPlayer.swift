@@ -47,6 +47,17 @@ internal class AudioPlayer: NSObject {
             //
         }
     }
+    
+    public init(fileName: String, extension: String) {
+        let path = Bundle.module.path(forResource: fileName, ofType: extension)!
+        let url = URL(fileURLWithPath: path)
+        do {
+            let sound = try AVAudioPlayer(contentsOf: url)
+            myAudio = sound
+        } catch {
+            //
+        }
+    }
 
     func play() {
         myAudio?.delegate = self // audioPlayerDidFinishPlaying

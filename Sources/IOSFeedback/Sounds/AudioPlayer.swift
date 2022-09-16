@@ -60,7 +60,7 @@ internal class AudioPlayer: NSObject {
     }
     
     deinit {
-        print("👋🏻 Deinit")
+        print("AudioPlayer: 👋🏻 Deinit")
     }
 
     func play() {

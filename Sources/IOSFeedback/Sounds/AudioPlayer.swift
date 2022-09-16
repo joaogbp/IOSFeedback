@@ -58,6 +58,10 @@ internal class AudioPlayer: NSObject {
             //
         }
     }
+    
+    deinit {
+        print("👋🏻 Deinit")
+    }
 
     func play() {
         myAudio?.delegate = self // audioPlayerDidFinishPlaying

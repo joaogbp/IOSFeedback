@@ -46,7 +46,7 @@ internal class AudioPlayer: NSObject {
         var path = ""
         switch audio {
         case .custom(let file, let type):
-            path = Bundle.module.path(forResource: file, ofType: type)!
+            path = Bundle.main.path(forResource: file, ofType: type)!
         case .audio(let audio):
             path = Bundle.module.path(forResource: audio.rawValue, ofType: audio.getType().rawValue)!
         }

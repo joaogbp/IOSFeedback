@@ -9,7 +9,12 @@ import AVFoundation
 
 // MARK: - Audio Data
 
-public enum Audio: String {
+public enum Audio {
+    case custom(file: String, type: String)
+    case audio(audio: DefaultAudio)
+}
+
+public enum DefaultAudio: String {
     case myAudio = "MyAudio"
     
     func getType() -> AudioType {
@@ -38,18 +43,13 @@ internal class AudioPlayer: NSObject {
     private var myAudio: AVAudioPlayer?
 
     public init(audio: Audio) {
-        let path = Bundle.module.path(forResource: audio.rawValue, ofType: audio.getType().rawValue)!
-        let url = URL(fileURLWithPath: path)
-        do {
-            let sound = try AVAudioPlayer(contentsOf: url)
-            myAudio = sound
-        } catch {
-            //
+        var path = ""
+        switch audio {
+        case .custom(let file, let type):
+            path = Bundle.module.path(forResource: file, ofType: type)!
+        case .audio(let audio):
+            path = Bundle.module.path(forResource: audio.rawValue, ofType: audio.getType().rawValue)!
         }
-    }
-    
-    public init(fileName: String, extension: String) {
-        let path = Bundle.module.path(forResource: fileName, ofType: extension)!
         let url = URL(fileURLWithPath: path)
         do {
             let sound = try AVAudioPlayer(contentsOf: url)

@@ -14,7 +14,6 @@ public class ManagerFeedback {
     
     static var userDefaults: UserDefaults = UserDefaults.standard
     
-    static private(set) var isHapticEnabledString = FeedbackLocalKeys.haptic.rawValue
     static public var isHapticEnabled: Bool {
         get {
             userDefaults.bool(forKey: FeedbackLocalKeys.haptic.rawValue)
@@ -24,7 +23,6 @@ public class ManagerFeedback {
         }
     }
     
-    static private(set) var isSoundEnabledString = FeedbackLocalKeys.sound.rawValue
     static public var isSoundEnabled: Bool {
         get {
             userDefaults.bool(forKey: FeedbackLocalKeys.sound.rawValue)
